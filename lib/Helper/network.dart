@@ -10,6 +10,8 @@ class Network {
   final baseUrl = "https://oddsviewer.com/";
   final contactUsEndPoint = "contact";
   final liveMatches = "";
+  final pointTable = "point-tables";
+  final iccRanking = "admin/ranking-icc";
 
   // Submit contact request
   Future<Result> submitContact(Map<String, dynamic> params) async {
@@ -24,4 +26,16 @@ class Network {
 
   // List Live matches
 
+
+  // Point table
+  Future pointTableData() async {
+    final response = await http.get(Uri.parse(baseUrl+pointTable));
+    return jsonDecode(response.body);
+  }
+
+  // ICC Ranking
+  Future iccRankingData() async {
+    final response = await http.get(Uri.parse(baseUrl+iccRanking));
+    return jsonDecode(response.body);
+  }
 }
