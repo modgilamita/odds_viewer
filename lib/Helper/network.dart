@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:odds_viewer/Helper/models.dart';
+import 'package:odds_viewer/Helper/pointTable.dart';
 
 class Network {
 
@@ -28,13 +29,19 @@ class Network {
 
 
   // Point table
-  Future pointTableData() async {
+  Future<List<Points>> pointTableData() async {
+  //   Future pointTableData() async {
     final response = await http.get(Uri.parse(baseUrl+pointTable));
-    return jsonDecode(response.body);
+    return parsePoints(response.body);
+  }
+
+  List<Points> parsePoints(String response) {
+    final  parsed = jsonDecode(response).cast<Map<String, dynamic>>();
+    return List<Points>.from(parsed.map((i) => Points.fromJson(i)));
   }
 
   // ICC Ranking
-  Future iccRankingData() async {
+  Future<String> iccRankingData() async {
     final response = await http.get(Uri.parse(baseUrl+iccRanking));
     return jsonDecode(response.body);
   }
