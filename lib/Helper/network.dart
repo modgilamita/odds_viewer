@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:odds_viewer/Helper/icc_ranking_model.dart';
 import 'package:odds_viewer/Helper/models.dart';
 
 class Network {
@@ -34,8 +35,8 @@ class Network {
   }
 
   // ICC Ranking
-  Future iccRankingData() async {
+  Future<Ranking> iccRankingData() async {
     final response = await http.get(Uri.parse(baseUrl+iccRanking));
-    return jsonDecode(response.body);
+    return Ranking.fromJson(jsonDecode(response.body));
   }
 }
