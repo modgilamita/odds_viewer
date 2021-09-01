@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:odds_viewer/Helper/constants.dart';
 import 'package:odds_viewer/Helper/icc_ranking_model.dart';
 import 'package:odds_viewer/Helper/network.dart';
-class IccRanking extends StatelessWidget {
+
+class IccRanking extends StatefulWidget {
   const IccRanking({Key? key}) : super(key: key);
 
+  @override
+  _IccRankingState createState() => _IccRankingState();
+}
+
+class _IccRankingState extends State<IccRanking> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,8 +40,7 @@ class ICCRankingUI extends StatelessWidget {
       future: Network.shared.iccRankingData(),
         builder: (context, snapshot) {
       if (snapshot.hasData) {
-        print(snapshot.data!.id);
-        return Center(child: Text(snapshot.data.toString()),);
+        return Center(child: Text(snapshot.data!.type.toUpperCase()),);
       }
       else if (snapshot.hasError) {
         return Center(child: Text(snapshot.error.toString()),);
@@ -46,3 +51,5 @@ class ICCRankingUI extends StatelessWidget {
     });
   }
 }
+
+
