@@ -37,7 +37,6 @@ class PointTableUI extends StatelessWidget {
         future: Network.shared.pointTableData(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            print("Error in API");
             print(snapshot.error);
             // ScaffoldMessenger.of(context).showSnackBar(
             //     SnackBar(content: Text(snapshot.error.toString())));
