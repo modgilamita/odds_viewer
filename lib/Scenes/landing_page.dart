@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:odds_viewer/Helper/constants.dart';
 import 'package:odds_viewer/Scenes/contact.dart';
 import 'package:odds_viewer/Scenes/icc_ranking.dart';
-import 'package:odds_viewer/Scenes/live_score.dart';
+import 'package:odds_viewer/Scenes/live_matches.dart';
 import 'package:odds_viewer/Scenes/point_table.dart';
 import 'package:odds_viewer/Scenes/recent_matches.dart';
 import 'package:odds_viewer/Scenes/settings.dart';
@@ -50,7 +50,7 @@ class LandingPage extends StatelessWidget {
                 GestureDetector(
                   onTap: () => {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LiveScore()))
+                        MaterialPageRoute(builder: (context) => LiveMatches()))
                   },
                   child: CardView(
                       imageName: OVAssets.live,

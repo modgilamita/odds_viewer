@@ -12,13 +12,13 @@ class LiveMatch {
   final ChampionShip? championShip;
   final Team? teamA;
   final Team? teamB;
-  final String startDate;
-  final String utcStartDate;
-  final String location;
-  final String type;
-  final String matchType;
-  final String overPerInnings;
-  final String matchNumber;
+  final String? startDate;
+  final String? utcStartDate;
+  final String? location;
+  final String? type;
+  final String? matchType;
+  final String? overPerInnings;
+  final String? matchNumber;
   final Info? info;
 
   LiveMatch({
@@ -53,7 +53,7 @@ class LiveMatch {
       bookmarker: json['bookmarker'],
       scores: json['scores'],
       id: json['_id'],
-      championShip: ChampionShip.fromJson(json['_championShip']),
+      championShip: ChampionShip.fromJson(json['championShip']),
       teamA: Team.fromJson(json['teamA']),
       teamB: Team.fromJson(json['teamB']),
       startDate: json['startDate'],
@@ -69,15 +69,15 @@ class LiveMatch {
 }
 
 class Info {
-  final String umpire;
-  final String third;
-  final String refree;
-  final String avgFirst;
-  final String avgSecond;
-  final String avgTotal;
-  final String avgTotalLowest;
-  final String playingXIA;
-  final String playingXIB;
+  final String? umpire;
+  final String? third;
+  final String? refree;
+  final String? avgFirst;
+  final String? avgSecond;
+  final String? avgTotal;
+  final String? avgTotalLowest;
+  final String? playingXIA;
+  final String? playingXIB;
 
   Info({
     required this.umpire,
@@ -107,11 +107,11 @@ class Info {
 }
 
 class Team {
-  final String id;
-  final String name;
-  final String image;
-  final String shortName;
-  final String type;
+  final String? id;
+  final String? name;
+  final String? image;
+  final String? shortName;
+  final String? type;
 
   Team({
     required this.id,
@@ -133,14 +133,14 @@ class Team {
 }
 
 class ChampionShip {
-  final List<String> teams;
+  final List<dynamic> teams;
   final bool finished;
-  final String id;
-  final String name;
-  final String image;
-  final String startDate;
-  final String location;
-  final String type;
+  final String? id;
+  final String? name;
+  final String? image;
+  final DateTime? startDate;
+  final String? location;
+  final String? type;
 
   ChampionShip({
     required this.teams,
@@ -160,7 +160,7 @@ class ChampionShip {
       id: json['_id'],
       name: json['name'],
       image: json['image'],
-      startDate: json['startDate'],
+      startDate: DateTime.parse(json['startDate']),
       location: json['location'],
       type: json['type'],
     );
