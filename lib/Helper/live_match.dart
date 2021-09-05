@@ -133,7 +133,7 @@ class Team {
 }
 
 class ChampionShip {
-  final List<dynamic> teams;
+  final List<String> teams;
   final bool finished;
   final String? id;
   final String? name;
@@ -155,7 +155,7 @@ class ChampionShip {
 
   factory ChampionShip.fromJson(Map<String, dynamic> json) {
     return ChampionShip(
-      teams: json['teams'],
+      teams: List<String>.from(json['teams'].map((x) => x)),
       finished: json['finished'],
       id: json['_id'],
       name: json['name'],

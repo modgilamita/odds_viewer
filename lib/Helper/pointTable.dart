@@ -1,10 +1,12 @@
 import 'dart:ffi';
 
+import 'package:odds_viewer/Helper/live_match.dart';
+
 class Points {
   final String id;
-  final dynamic data;
+  final List<PointsGroup>? data;
   final String type;
-  final dynamic championship;
+  final ChampionShip? championship;
   final int version;
 
   Points({
@@ -18,9 +20,9 @@ class Points {
   factory Points.fromJson(Map<String, dynamic> json) {
     return Points(
       id: json['_id'],
-      data: json['data'],
+      data: List<PointsGroup>.from(json['data'].map((x) => PointsGroup.fromJson(x))),
       type: json['type'],
-      championship: json['championship'],
+      championship: json['championship'] == null ? null : ChampionShip.fromJson(json['championship']),
       version: json['__v'],
     );
   }
@@ -28,7 +30,7 @@ class Points {
 
 class PointsGroup {
   final String id;
-  final dynamic teams;
+  final List<Team>? teams;
 
   PointsGroup({
     required this.id,
@@ -38,7 +40,7 @@ class PointsGroup {
   factory PointsGroup.fromJson(Map<String, dynamic> json) {
     return PointsGroup(
       id: json['_id'],
-      teams: json['teams'],
+      teams: List<Team>.from(json['teams'].map((x) => Team.fromJson(x))),
     );
   }
 }

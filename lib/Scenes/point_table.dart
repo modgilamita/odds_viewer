@@ -3,9 +3,15 @@ import 'package:odds_viewer/Helper/constants.dart';
 import 'package:odds_viewer/Helper/network.dart';
 import 'package:odds_viewer/Helper/pointTable.dart';
 
-class PointTable extends StatelessWidget {
+
+class PointTable extends StatefulWidget {
   const PointTable({Key? key}) : super(key: key);
 
+  @override
+  _PointTableState createState() => _PointTableState();
+}
+
+class _PointTableState extends State<PointTable> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,10 +43,9 @@ class PointTableUI extends StatelessWidget {
         future: Network.shared.pointTableData(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
+            // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(snapshot.error.toString())));
             print(snapshot.error);
-            // ScaffoldMessenger.of(context).showSnackBar(
-            //     SnackBar(content: Text(snapshot.error.toString())));
-            return ListView(children: []);
+            return Text("Please try again in some time");
           } else if (snapshot.hasData) {
             return PointsListUI(points: snapshot.data!);
           } else {
@@ -64,7 +69,8 @@ class PointsListUI extends StatelessWidget {
       child: ListView.builder(
         itemCount: points.length,
         itemBuilder: (context, index) {
-          return Text(points[index].data[0].name);
+          final groups = points[index].data as List<PointsGroup>;
+          return Text(groups.toString());
       },
       )
     );
