@@ -47,7 +47,8 @@ class PointTableUI extends StatelessWidget {
             print(snapshot.error);
             return Text("Please try again in some time");
           } else if (snapshot.hasData) {
-            return PointsListUI(points: snapshot.data!);
+            return Padding(padding: EdgeInsets.all(16),
+            child: PointsListUI(points: snapshot.data!),);
           } else {
             return const Center(
               child: CircularProgressIndicator(),
@@ -69,8 +70,30 @@ class PointsListUI extends StatelessWidget {
       child: ListView.builder(
         itemCount: points.length,
         itemBuilder: (context, index) {
-          final groups = points[index].data as List<PointsGroup>;
-          return Text(groups.toString());
+          final championship = points[index].championship!;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
+                child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ClipRRect(
+                    child: Image.network(Network.shared.baseUrl + "images/" + championship.image!,
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.fill,),
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  Padding(padding: EdgeInsets.all(4),),
+                  Text(championship.name!,
+                    style: OVTextStyle.boldTitle(),)
+                ],
+              ),
+              ),
+            ],
+          );
       },
       )
     );

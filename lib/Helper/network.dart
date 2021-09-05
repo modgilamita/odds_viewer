@@ -37,7 +37,7 @@ class Network {
   // Point table
   Future<List<Points>> pointTableData() async {
     final response = await http.get(Uri.parse(baseUrl+pointTable));
-    return parsePoints(response.body);
+    return parsePoints(response.body).where((element) => element.championship != null).toList();
   }
 
   List<Points> parsePoints(String response) {

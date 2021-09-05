@@ -29,17 +29,17 @@ class Points {
 }
 
 class PointsGroup {
-  final String id;
+  final String name;
   final List<Team>? teams;
 
   PointsGroup({
-    required this.id,
+    required this.name,
     required this.teams,
   });
 
   factory PointsGroup.fromJson(Map<String, dynamic> json) {
     return PointsGroup(
-      id: json['_id'],
+      name: json['name'],
       teams: List<Team>.from(json['teams'].map((x) => Team.fromJson(x))),
     );
   }
@@ -47,13 +47,13 @@ class PointsGroup {
 
 class Team {
   final String name;
-  final int matches;
-  final int win;
-  final int tied;
-  final int nr;
-  final int lost;
-  final int points;
-  final int nrr;
+  final String matches;
+  final String win;
+  final String tied;
+  final String nr;
+  final String lost;
+  final String points;
+  final String nrr;
 
   Team({
     required this.name,
