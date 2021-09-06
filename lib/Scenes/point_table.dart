@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:odds_viewer/Helper/constants.dart';
 import 'package:odds_viewer/Helper/network.dart';
 import 'package:odds_viewer/Helper/pointTable.dart';
+import 'package:odds_viewer/Scenes/point_list_table.dart';
 
 
 class PointTable extends StatefulWidget {
@@ -70,29 +71,37 @@ class PointsListUI extends StatelessWidget {
       child: ListView.builder(
         itemCount: points.length,
         itemBuilder: (context, index) {
-          final championship = points[index].championship!;
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
-                child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ClipRRect(
-                    child: Image.network(Network.shared.baseUrl + "images/" + championship.image!,
-                      width: 60,
-                      height: 60,
-                      fit: BoxFit.fill,),
-                    borderRadius: BorderRadius.circular(30.0),
+          final item = points[index];
+          return GestureDetector(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ClipRRect(
+                        child: Image.network(Network.shared.baseUrl + "images/" + item.championship!.image!,
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.fill,),
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      Padding(padding: EdgeInsets.all(4),),
+                      Text(item.championship!.name!,
+                        style: OVTextStyle.boldTitle(),)
+                    ],
                   ),
-                  Padding(padding: EdgeInsets.all(4),),
-                  Text(championship.name!,
-                    style: OVTextStyle.boldTitle(),)
-                ],
-              ),
-              ),
-            ],
+                ),
+              ],
+            ),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PointListTable(pointTable: item)));
+            },
           );
       },
       )

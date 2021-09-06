@@ -62,19 +62,24 @@ class LiveMatchesUI extends StatelessWidget {
           final title = (item.teamA!.name! + "  vs  " + item.teamB!.name!);
           final startDate = DateFormat('dd MMM,yyyy hh:mm a').format(item.championShip!.startDate!);
           return Padding(padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(padding: EdgeInsets.all(2),),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                child: Text(title,
-                  style: OVTextStyle.boldTitle(),),
-              ),
-              Text(startDate,
-                style: OVTextStyle.normalTitle(),),
-              Padding(padding: EdgeInsets.all(2),),
-            ],
+          child: GestureDetector(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(padding: EdgeInsets.all(2),),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Text(title,
+                    style: OVTextStyle.boldTitle(),),
+                ),
+                Text(startDate,
+                  style: OVTextStyle.normalTitle(),),
+                Padding(padding: EdgeInsets.all(2),),
+              ],
+            ),
+            onTap: () {
+              print("Click to team match");
+            },
           ),
           );
     });
