@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class LiveMatch {
   final String status;
@@ -13,7 +14,7 @@ class LiveMatch {
   final Team? teamA;
   final Team? teamB;
   final String? startDate;
-  final String? utcStartDate;
+  final DateTime? utcStartDate;
   final String? location;
   final String? type;
   final String? matchType;
@@ -57,7 +58,7 @@ class LiveMatch {
       teamA: Team.fromJson(json['teamA']),
       teamB: Team.fromJson(json['teamB']),
       startDate: json['startDate'],
-      utcStartDate: json['utcStartDate'],
+      utcStartDate: DateFormat('yyyy-MM-dd hh:mm:ss').parse(json['startDateUtc']),
       location: json['location'],
       type: json['type'],
       matchType: json['matchType'],
@@ -164,5 +165,16 @@ class ChampionShip {
       location: json['location'],
       type: json['type'],
     );
+  }
+}
+
+extension OVString on String {
+  DateTime dateWith(String format) {
+    final dateFormat = DateFormat(format);
+    return dateFormat.parse(this);
+  }
+  DateTime date() {
+    final format = "yyyy-MM-dd hh:mm:ss";
+    return dateWith(format);
   }
 }

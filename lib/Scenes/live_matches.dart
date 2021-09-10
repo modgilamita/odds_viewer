@@ -60,7 +60,7 @@ class LiveMatchesUI extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = list[index];
           final title = (item.teamA!.name! + "  vs  " + item.teamB!.name!);
-          final startDate = DateFormat('dd MMM,yyyy hh:mm a').format(item.championShip!.startDate!);
+          final startDate = DateFormat('dd MMM,yyyy hh:mm a').format(item.utcStartDate!);
           return Padding(padding: EdgeInsets.all(16),
           child: GestureDetector(
             child: Column(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:odds_viewer/Helper/constants.dart';
 import 'package:odds_viewer/Scenes/landing_page.dart';
 
 void main() {
@@ -18,3 +19,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
