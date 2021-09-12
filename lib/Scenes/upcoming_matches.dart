@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:odds_viewer/Helper/constants.dart';
+import 'package:odds_viewer/Helper/list_cell_view.dart';
 import 'package:odds_viewer/Helper/network.dart';
 import 'package:odds_viewer/Helper/upoming_matches.dart';
 
@@ -42,7 +43,7 @@ class UpcomingMatchesUi extends StatelessWidget {
           return Text(snapshot.error.toString());
         } else if (snapshot.hasData) {
           final upcomingMatches = snapshot.data!.docs as List<OVMatch>;
-          return drawList(upcomingMatches, context);
+          return upcomingMatches.isNotEmpty ? drawList(upcomingMatches, context) : Text('No record found');
         } else {
           return CircularProgressIndicator();
         }
@@ -55,33 +56,10 @@ class UpcomingMatchesUi extends StatelessWidget {
         itemCount: list.length,
         itemBuilder: (context, index) {
           final item = list[index];
-          final title = (item.teamA!.name! + "  vs  " + item.teamB!.name!);
-          final startDate = DateFormat('dd MMM,yyyy hh:mm a').format(item.utcStartDate!);
           return Padding(
             padding: EdgeInsets.all(16),
             child: GestureDetector(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(2),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Text(
-                      title,
-                      style: OVTextStyle.boldTitle(),
-                    ),
-                  ),
-                  Text(
-                    startDate,
-                    style: OVTextStyle.normalTitle(),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(2),
-                  ),
-                ],
-              ),
+              child: ListCellView(match: item,),
               onTap: () {
                 print("Click to team match");
               },

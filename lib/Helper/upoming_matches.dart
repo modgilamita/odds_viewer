@@ -23,7 +23,7 @@ class OVMatch {
   final dynamic bookmarker;
   final dynamic scores;
   final String id;
-  final String? championShip;
+  final dynamic championShip;
   final Team? teamA;
   final Team? teamB;
   final String? startDate;
@@ -71,11 +71,11 @@ class OVMatch {
       bookmarker: json['bookmarker'],
       scores: json['scores'],
       id: json['_id'],
-      championShip: json['championShip'],
+      championShip: (json['championShip'] is String) ? json['championShip'] : ChampionShip.fromJson(json['championShip']),
       teamA: Team.fromJson(json['teamA']),
       teamB: Team.fromJson(json['teamB']),
       startDate: json['startDate'],
-      utcStartDate: DateFormat('yyyy-MM-dd hh:mm:ss').parse(json['startDateUtc']),
+      utcStartDate: DateFormat('yyyy-MM-dd hh:mm:ss').parse(json['startDateUtc'], true),
       location: json['location'],
       type: json['type'],
       matchType: json['matchType'],

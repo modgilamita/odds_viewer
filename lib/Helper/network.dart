@@ -32,10 +32,10 @@ class Network {
   }
 
   // List Live matches
-  Future<List<LiveMatch>> liveMatchesData(String page) async {
+  Future<List<OVMatch>> liveMatchesData(String page) async {
     final response = await http.get(Uri.parse(baseUrl+liveMatches+page));
     final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
-    return List<LiveMatch>.from(parsed.map((i) => LiveMatch.fromJson(i)));
+    return List<OVMatch>.from(parsed.map((i) => OVMatch.fromJson(i)));
   }
 
   // List Recent matches
