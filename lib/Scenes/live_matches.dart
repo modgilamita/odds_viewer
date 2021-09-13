@@ -5,6 +5,7 @@ import 'package:odds_viewer/Helper/list_cell_view.dart';
 import 'package:odds_viewer/Helper/live_match.dart';
 import 'package:odds_viewer/Helper/network.dart';
 import 'package:odds_viewer/Helper/upoming_matches.dart';
+import 'package:odds_viewer/Scenes/match_detail.dart';
 
 class LiveMatches extends StatelessWidget {
   const LiveMatches({Key? key}) : super(key: key);
@@ -62,7 +63,9 @@ class LiveMatchesUI extends StatelessWidget {
           child: GestureDetector(
             child: ListCellView(match: item,),
             onTap: () {
-              print("Click to team match");
+              Navigator.push(context,
+              MaterialPageRoute(builder: (context) => MatchDetailScene(match: item,)),
+              );
             },
           ),
           );
