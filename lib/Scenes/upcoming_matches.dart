@@ -4,6 +4,7 @@ import 'package:odds_viewer/Helper/constants.dart';
 import 'package:odds_viewer/Helper/list_cell_view.dart';
 import 'package:odds_viewer/Helper/network.dart';
 import 'package:odds_viewer/Helper/upoming_matches.dart';
+import 'package:odds_viewer/Scenes/match_detail.dart';
 
 class UpcomingMatches extends StatelessWidget {
   const UpcomingMatches({Key? key}) : super(key: key);
@@ -61,7 +62,7 @@ class UpcomingMatchesUi extends StatelessWidget {
             child: GestureDetector(
               child: ListCellView(match: item,),
               onTap: () {
-                print("Click to team match");
+                // DO Nothing
               },
             ),
           );

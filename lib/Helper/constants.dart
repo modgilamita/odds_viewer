@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 class OVColor {
   static final themeColor = false ? Color(0xFF1E2250) : Color(0xFFFFFFFF);
   static final textColor = false ? Color(0xFFFFFFFF) : Color(0xFF1E2250);
+  static final bg1Color = false ? Color(0xFFFFFFFF) : Color(0xFFEFEFEF);
+  static final bg2Color = false ? Color(0xFFFFFFFF) : Color(0xFFF5F5F5);
 }
 
 class OVAssets {

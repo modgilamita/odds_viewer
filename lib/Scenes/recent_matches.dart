@@ -4,6 +4,7 @@ import 'package:odds_viewer/Helper/constants.dart';
 import 'package:odds_viewer/Helper/list_cell_view.dart';
 import 'package:odds_viewer/Helper/network.dart';
 import 'package:odds_viewer/Helper/upoming_matches.dart';
+import 'package:odds_viewer/Scenes/match_detail.dart';
 
 class RecentMatches extends StatelessWidget {
   const RecentMatches({Key? key}) : super(key: key);
@@ -40,7 +41,7 @@ class RecentMatchesUI extends StatelessWidget {
         future: Network.shared.recentMatchesData('1'),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            print(snapshot.error);
+            print('Error in API Parse - ' + snapshot.error.toString());
             return Text(snapshot.error.toString());
           }
           else if (snapshot.hasData) {
@@ -62,7 +63,9 @@ class RecentMatchesUI extends StatelessWidget {
             child: GestureDetector(
               child: ListCellView(match: item,),
               onTap: () {
-                print("Click to team match");
+                Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => MatchDetailScene(match: item,)),
+                );
               },
             ),
           );
