@@ -49,7 +49,8 @@ class LandingPage extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () => {
-                    Navigator.push(context,
+                    Navigator.push(
+                        context,
                         MaterialPageRoute(builder: (context) => LiveMatches()))
                   },
                   child: CardView(

@@ -15,10 +15,10 @@ class Docs {
 class OVMatch {
   final String status;
   final List<Inning> innings;
-  final dynamic marketRate;
-  final dynamic session;
+  final List<MarketRate> marketRate;
+  final List<Session> session;
   final dynamic lambi;
-  final dynamic bookmarker;
+  final List<MarketRate> bookmarker;
   final dynamic scores;
   final String id;
   final dynamic championShip;
@@ -64,10 +64,10 @@ class OVMatch {
       status: json['status'],
       innings: List<Inning>.from(
           json["innings"].map((x) => Inning.fromJson(x))),
-      marketRate: json['marketRate'],
-      session: json['session'],
+      marketRate: List<MarketRate>.from(json["marketRate"].map((x) => MarketRate.fromJson(x))),
+      session: List<Session>.from(json["session"].map((x) => Session.fromJson(x))),
       lambi: json['lambi'],
-      bookmarker: json['bookmarker'],
+      bookmarker: List<MarketRate>.from(json["bookmarker"].map((x) => MarketRate.fromJson(x))),
       scores: json['scores'],
       id: json['_id'],
       championShip: (json['championShip'] is String)
@@ -86,6 +86,72 @@ class OVMatch {
       info: Info.fromJson(json['info']),
       pausedDue: json['pausedDue'] == null ? "" : json['pausedDue'],
       winBy: json['winBy'] == null ? "" : json['winBy'],
+    );
+  }
+}
+
+class Session {
+  final String mtype;
+  final String mname;
+  final String name;
+  final dynamic back;
+  final dynamic lay;
+  final String status;
+  final String statusLabel;
+  Session({
+    required this.mtype,
+    required this.mname,
+    required this.name,
+    required this.back,
+    required this.lay,
+    required this.status,
+    required this.statusLabel,
+});
+  factory Session.fromJson(Map<String, dynamic> json) {
+    return Session(
+      mtype: json['mtype'],
+      mname: json['mname'],
+      name: json['name'],
+      back: json['back'],
+      lay: json['lay'],
+      status: json['status'],
+      statusLabel: json['statusLabel'],
+    );
+  }
+}
+
+class MarketRate {
+  final String name;
+  final dynamic back;
+  final dynamic lay;
+  MarketRate({
+    required this.name,
+    required this.back,
+    required this.lay,
+});
+  factory MarketRate.fromJson(Map<String, dynamic> json) {
+    return MarketRate(
+        name: json['name'],
+        back: json['back'] ,
+        lay: json['lay'] ,
+    );
+  }
+}
+
+class MarketObject {
+  final String price;
+  final String size;
+  final String line;
+  MarketObject({
+    required this.price,
+    required this.size,
+    required this.line,
+});
+  factory MarketObject.fromJson(Map<String, dynamic> json) {
+    return MarketObject(
+      price: json['price'] ? json['price'].toString() : '0.0',
+      size: json['size'] ? json['size'].toString() : '0.0',
+      line: json['line'] ? json['line'].toString() : '0.0',
     );
   }
 }
@@ -178,7 +244,7 @@ class ChampionShip {
   factory ChampionShip.fromJson(Map<String, dynamic> json) {
     return ChampionShip(
       teams: List<String>.from(json['teams'].map((x) => x)),
-      finished: json['finished'],
+      finished: (json['finished'] is bool) ? json['finished'] : false,
       id: json['_id'],
       name: json['name'],
       image: json['image'],
@@ -241,7 +307,7 @@ class Inning {
             json["batsmen"].map((x) => LastBatsmanOut.fromJson(x))),
         retired: List<dynamic>.from(json["retired"].map((x) => x)),
         wicketfall: List<dynamic>.from(json["wicketfall"].map((x) => x)),
-        finished: json["finished"],
+        finished: (json["finished"] is bool) ? json["finished"] : false,
         oldCopie: List<dynamic>.from(json["oldCopie"].map((x) => x)),
         id: json["_id"],
         battingTeam: BattingTeam.fromJson(json["battingTeam"]),
@@ -278,12 +344,12 @@ class LastBatsmanOut {
 
   factory LastBatsmanOut.fromJson(Map<String, dynamic> json) => LastBatsmanOut(
         name: json["name"],
-        isOnStrike: json["isOnStrike"] ?? false,
-        balls: json["balls"] ?? 0,
-        batsmanRuns: json["batsmanRuns"] ?? 0,
-        fours: json["fours"] ?? 0,
-        sixes: json["sixes"] ?? 0,
-        strikeRate: (json["strikeRate"] ?? 0).toDouble(),
+        isOnStrike: json["isOnStrike"] == null ? false : json["isOnStrike"],
+        balls: json["balls"] == null ? 0 : json["balls"],
+        batsmanRuns: json["batsmanRuns"] == null ? 0 : json["batsmanRuns"],
+        fours: json["fours"] == null ? 0 : json["fours"],
+        sixes: json["sixes"] == null ? 0 : json["sixes"],
+        strikeRate: json["strikeRate"] == null ? 0.0 : json["strikeRate"].toDouble(),
         outBy: json["outBy"] == null ? '' : json["outBy"],
       );
 }
@@ -319,14 +385,14 @@ class BattingTeam {
 
   factory BattingTeam.fromJson(Map<String, dynamic> json) => BattingTeam(
         name: json["name"],
-        partnerShipBalls: json["partnerShipBalls"] ?? 0,
-        partnerShipScore: json["partnerShipScore"] ?? 0,
+        partnerShipBalls: json["partnerShipBalls"] == null ? 0 : json["partnerShipBalls"],
+        partnerShipScore: json["partnerShipScore"] == null ? 0 : json["partnerShipScore"],
         runRate: json["runRate"].toDouble() ,
-        score: json["score"] ?? 0,
-        wickets: json["wickets"] ?? 0,
-        overs: ((json["overs"] ?? 0) is int) ? (json["overs"] ?? 0).toString() : json["overs"],
-        balls: json["balls"] ?? 0,
-        requiredRunRate: (json["requiredRunRate"] ?? 0).toDouble(),
+        score: json["score"] == null ? 0 : json["score"] ,
+        wickets: json["wickets"] == null ? 0 : json["wickets"],
+        overs: (json["overs"] is int) ? json["overs"].toString() : (json["overs"] ?? '0'),
+        balls: json["balls"] == null ? 0 : json["balls"],
+        requiredRunRate: (json["requiredRunRate"] == null ? 0.0 : json["requiredRunRate"]).toDouble(),
         requiredRuns:
             json["requiredRuns"] == null ? 0 : json["requiredRuns"],
         projScr: json["projScr"] == null ? 0 : json["projScr"],
@@ -354,9 +420,9 @@ class Bowler {
   factory Bowler.fromJson(Map<String, dynamic> json) => Bowler(
         name: json["name"],
         overs: json["overs"].toDouble(),
-        maidens: json["maidens"] ?? 0,
-        wickets: json["wickets"] ?? 0,
-        bowlerRuns: json["bowlerRuns"] ?? 0,
+        maidens: json["maidens"] == null ? 0 : json["maidens"],
+        wickets: json["wickets"] == null ? 0 : json["wickets"],
+        bowlerRuns: json["bowlerRuns"] == null ? 0 : json["bowlerRuns"],
         economy: json["economy"].toDouble(),
       );
 }
@@ -383,10 +449,10 @@ class TOver {
   factory TOver.fromJson(Map<String, dynamic> json) => TOver(
         bowlerName: json["bowlerName"],
         batsNames: List<String>.from(json["batsNames"].map((x) => x)),
-        overNumber: json["overNumber"] ?? 0,
-        runs: json["runs"] ?? 0,
-        score: json["score"] ?? 0,
-        wickets: json["wickets"] ?? 0,
+        overNumber: json["overNumber"] == null ? 0 : json["overNumber"],
+        runs: json["runs"] == null ? 0 : json["runs"],
+        score: json["score"] == null ? 0 : json["score"],
+        wickets: json["wickets"] == null ? 0 : json["wickets"],
         balls: List<Ball>.from(json["balls"].map((x) => Ball.fromJson(x))),
       );
 }
@@ -403,7 +469,7 @@ class Ball {
   String? type;
 
   factory Ball.fromJson(Map<String, dynamic> json) => Ball(
-        number: json["number"] ?? 0,
+        number: json["number"] == null ? 0 : json["number"],
         value: json["value"],
         type: json["type"],
       );
@@ -422,39 +488,10 @@ class Extras {
   int bye;
 
   factory Extras.fromJson(Map<String, dynamic> json) => Extras(
-        nb: json["nb"] ?? 0,
-        wide: json["wide"] ?? 0,
-        lb: json["lb"] ?? 0,
-        bye: json["bye"] ?? 0,
+        nb: json["nb"] == null ? 0 : json["nb"],
+        wide: json["wide"] == null ? 0 : json["wide"],
+        lb: json["lb"] == null ? 0 : json["lb"],
+        bye: json["bye"] == null ? 0 : json["bye"],
       );
 }
 
-class Session {
-  Session({
-    required this.mtype,
-    required this.mname,
-    required this.name,
-    required this.back,
-    required this.lay,
-    required this.status,
-    required this.statusLabel,
-  });
-
-  String? mtype;
-  String? mname;
-  String? name;
-  dynamic back;
-  dynamic lay;
-  String? status;
-  String? statusLabel;
-
-  factory Session.fromJson(Map<String, dynamic> json) => Session(
-        mtype: json["mtype"],
-        mname: json["mname"],
-        name: json["name"],
-        back: json["back"],
-        lay: json["lay"],
-        status: json["status"],
-        statusLabel: json["statusLabel"],
-      );
-}

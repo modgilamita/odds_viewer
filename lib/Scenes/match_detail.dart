@@ -11,6 +11,7 @@ import 'package:odds_viewer/Helper/constants.dart';
 import 'package:odds_viewer/Helper/list_cell_view.dart';
 import 'package:odds_viewer/Helper/models.dart';
 import 'package:odds_viewer/Helper/upoming_matches.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class MatchDetailScene extends StatefulWidget {
   const MatchDetailScene({Key? key, required this.match}) : super(key: key);
@@ -103,7 +104,7 @@ class MatchLiveLine extends StatelessWidget {
           Container(
             color: OVColor.bg2Color,
             child: Text(
-              match.winBy!.toUpperCase(),
+              match.winBy.toUpperCase(),
               style: TextStyle(
                   fontWeight: FontWeight.normal,
                   fontSize: 20,
@@ -251,11 +252,12 @@ class LiveInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
     final _inning = match.innings.last;
+    print(_inning.lastOver.balls.map((e) => e.value));
     final _text = _inning.battingTeam.name! +
         ' ' +
-        _inning.battingTeam.score!.toString() +
+        _inning.battingTeam.score.toString() +
         '/' +
-        _inning.battingTeam.wickets!.toString();
+        _inning.battingTeam.wickets.toString();
     return Column(
       children: [
         Row(
@@ -294,9 +296,9 @@ class LiveInfo extends StatelessWidget {
                 child: Container(
                   child: FittedBox(
                     child: Text(
-                      _inning.lastOver.balls.last.value == 'W'
-                          ? _inning.lastOver.balls.last.type!.toUpperCase()
-                          : _inning.lastOver.balls.last.value!.toUpperCase(),
+                      _inning.currentOver.balls.last.value == 'W'
+                          ? _inning.currentOver.balls.last.type!.toUpperCase()
+                          : _inning.currentOver.balls.last.value!.toUpperCase(),
                       style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.normal,
@@ -335,10 +337,9 @@ class LiveInfo extends StatelessWidget {
                   physics: ClampingScrollPhysics(),
                   shrinkWrap: false,
                   scrollDirection: Axis.horizontal,
-                  itemCount: _inning.lastOver.balls.length,
+                  itemCount: _inning.currentOver.balls.length,
                   itemBuilder: (context, index) {
-                    final _ball = _inning.lastOver.balls[index];
-                    print(_ball.value!);
+                    final _ball = _inning.currentOver.balls[index];
                     return Padding(
                       padding: EdgeInsets.all(8),
                       child: Container(
@@ -367,7 +368,7 @@ class LiveInfo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      (_inning.battingTeam.requiredRuns ?? 0).toString() +
+                      (_inning.battingTeam.requiredRuns).toString() +
                           ' runs required in ' +
                           (_inning.battingTeam.balls).toString() +
                           'balls',
