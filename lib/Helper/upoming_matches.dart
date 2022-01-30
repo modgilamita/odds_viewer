@@ -62,12 +62,15 @@ class OVMatch {
   factory OVMatch.fromJson(Map<String, dynamic> json) {
     return OVMatch(
       status: json['status'],
-      innings: List<Inning>.from(
-          json["innings"].map((x) => Inning.fromJson(x))),
-      marketRate: List<MarketRate>.from(json["marketRate"].map((x) => MarketRate.fromJson(x))),
-      session: List<Session>.from(json["session"].map((x) => Session.fromJson(x))),
+      innings:
+          List<Inning>.from(json["innings"].map((x) => Inning.fromJson(x))),
+      marketRate: List<MarketRate>.from(
+          json["marketRate"].map((x) => MarketRate.fromJson(x))),
+      session:
+          List<Session>.from(json["session"].map((x) => Session.fromJson(x))),
       lambi: json['lambi'],
-      bookmarker: List<MarketRate>.from(json["bookmarker"].map((x) => MarketRate.fromJson(x))),
+      bookmarker: List<MarketRate>.from(
+          json["bookmarker"].map((x) => MarketRate.fromJson(x))),
       scores: json['scores'],
       id: json['_id'],
       championShip: (json['championShip'] is String)
@@ -106,7 +109,7 @@ class Session {
     required this.lay,
     required this.status,
     required this.statusLabel,
-});
+  });
   factory Session.fromJson(Map<String, dynamic> json) {
     return Session(
       mtype: json['mtype'],
@@ -128,12 +131,12 @@ class MarketRate {
     required this.name,
     required this.back,
     required this.lay,
-});
+  });
   factory MarketRate.fromJson(Map<String, dynamic> json) {
     return MarketRate(
-        name: json['name'],
-        back: json['back'] ,
-        lay: json['lay'] ,
+      name: json['name'],
+      back: json['back'],
+      lay: json['lay'],
     );
   }
 }
@@ -146,7 +149,7 @@ class MarketObject {
     required this.price,
     required this.size,
     required this.line,
-});
+  });
   factory MarketObject.fromJson(Map<String, dynamic> json) {
     return MarketObject(
       price: json['price'] ? json['price'].toString() : '0.0',
@@ -349,7 +352,8 @@ class LastBatsmanOut {
         batsmanRuns: json["batsmanRuns"] == null ? 0 : json["batsmanRuns"],
         fours: json["fours"] == null ? 0 : json["fours"],
         sixes: json["sixes"] == null ? 0 : json["sixes"],
-        strikeRate: json["strikeRate"] == null ? 0.0 : json["strikeRate"].toDouble(),
+        strikeRate:
+            json["strikeRate"] == null ? 0.0 : json["strikeRate"].toDouble(),
         outBy: json["outBy"] == null ? '' : json["outBy"],
       );
 }
@@ -385,16 +389,21 @@ class BattingTeam {
 
   factory BattingTeam.fromJson(Map<String, dynamic> json) => BattingTeam(
         name: json["name"],
-        partnerShipBalls: json["partnerShipBalls"] == null ? 0 : json["partnerShipBalls"],
-        partnerShipScore: json["partnerShipScore"] == null ? 0 : json["partnerShipScore"],
-        runRate: json["runRate"].toDouble() ,
-        score: json["score"] == null ? 0 : json["score"] ,
+        partnerShipBalls:
+            json["partnerShipBalls"] == null ? 0 : json["partnerShipBalls"],
+        partnerShipScore:
+            json["partnerShipScore"] == null ? 0 : json["partnerShipScore"],
+        runRate: json["runRate"].toDouble(),
+        score: json["score"] == null ? 0 : json["score"],
         wickets: json["wickets"] == null ? 0 : json["wickets"],
-        overs: (json["overs"] is int) ? json["overs"].toString() : (json["overs"] ?? '0'),
+        overs: (json["overs"] is int)
+            ? json["overs"].toString()
+            : (json["overs"] ?? '0'),
         balls: json["balls"] == null ? 0 : json["balls"],
-        requiredRunRate: (json["requiredRunRate"] == null ? 0.0 : json["requiredRunRate"]).toDouble(),
-        requiredRuns:
-            json["requiredRuns"] == null ? 0 : json["requiredRuns"],
+        requiredRunRate:
+            (json["requiredRunRate"] == null ? 0.0 : json["requiredRunRate"])
+                .toDouble(),
+        requiredRuns: json["requiredRuns"] == null ? 0 : json["requiredRuns"],
         projScr: json["projScr"] == null ? 0 : json["projScr"],
         target: json["target"] == null ? 0 : json["target"],
       );
@@ -474,6 +483,7 @@ class Ball {
         type: json["type"],
       );
 }
+
 class Extras {
   Extras({
     required this.nb,
@@ -494,4 +504,3 @@ class Extras {
         bye: json["bye"] == null ? 0 : json["bye"],
       );
 }
-

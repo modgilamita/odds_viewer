@@ -13,7 +13,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    Socket.connect(Network.shared.baseUrl, 80).then((socket) => socket.emi);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -23,4 +22,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
