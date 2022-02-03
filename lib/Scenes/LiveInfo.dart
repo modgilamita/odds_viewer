@@ -100,6 +100,7 @@ class LiveInfo extends StatelessWidget {
                   itemCount: _inning.currentOver.balls.length,
                   itemBuilder: (context, index) {
                     final _ball = _inning.currentOver.balls[index];
+                    final _ballString = _ballValue(_ball);
                     return Padding(
                       padding: EdgeInsets.all(8),
                       child: Container(
@@ -113,7 +114,7 @@ class LiveInfo extends StatelessWidget {
                         child: Padding(
                           padding: EdgeInsets.all(4),
                           child: FittedBox(
-                            child: Text(_ball.value ?? ''),
+                            child: Text(_ballString),
                           ),
                         ),
                       ),
@@ -214,5 +215,24 @@ class LiveInfo extends StatelessWidget {
         )
       ],
     );
+  }
+
+  String _ballValue(Ball ball) {
+    switch (ball.type) {
+      case "WIDE":
+        return ball.value.toString() + "WD";
+      case "NOBALL":
+        return ball.value!.replaceAll("b", "") + "NB";
+      case "WICKET":
+        return ball.value.toString() + "W";
+      case "LEGBYE":
+        return ball.value.toString() + "L";
+      case "BYE":
+        return ball.value.toString() + "B";
+      case "INFIELDBOUNDARY":
+        return ball.value.toString();
+      default:
+        return "";
+    }
   }
 }

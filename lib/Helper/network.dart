@@ -7,7 +7,6 @@ import 'package:odds_viewer/Helper/upoming_matches.dart';
 import 'package:odds_viewer/Scenes/recent_matches.dart';
 
 class Network {
-
   Network._privateConstructor();
   static final Network shared = Network._privateConstructor();
 
@@ -16,15 +15,17 @@ class Network {
   final liveMatches = "liveMatches?matchType=1&page=";
   final recentMatches = "recentMatches?matchType=1&page=";
   final upcomingMatches = "upcomingMatches?matchType=1&page=";
+  final fullMatchDetails = "full-match?id=";
   final pointTable = "point-tables";
   final iccRanking = "admin/ranking-icc";
 
   // Submit contact request
   Future<Result> submitContact(Map<String, dynamic> params) async {
-    final response = await http.post(Uri.parse(baseUrl+contactUsEndPoint),
-      headers: <String, String> {
+    final response = await http.post(
+      Uri.parse(baseUrl + contactUsEndPoint),
+      headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        },
+      },
       body: jsonEncode(params),
     );
     return Result.fromJson(jsonDecode(response.body));
@@ -32,37 +33,47 @@ class Network {
 
   // List Live matches
   Future<List<OVMatch>> liveMatchesData(String page) async {
-    final response = await http.get(Uri.parse(baseUrl+liveMatches+page));
+    final response = await http.get(Uri.parse(baseUrl + liveMatches + page));
     final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
     return List<OVMatch>.from(parsed.map((i) => OVMatch.fromJson(i)));
   }
 
+  // Match Details
+  Future<OVMatch> matchDetails(String id) async {
+    final response = await http.get(Uri.parse(baseUrl + fullMatchDetails + id));
+    final parsed = jsonDecode(response.body);
+    return OVMatch.fromJson(parsed);
+  }
+
   // List Recent matches
   Future<Docs> recentMatchesData(String page) async {
-    final response = await http.get(Uri.parse(baseUrl+recentMatches+page));
+    final response = await http.get(Uri.parse(baseUrl + recentMatches + page));
     return Docs.fromJson(jsonDecode(response.body));
   }
 
   // List Upcoming matches
   Future<Docs> upcomingMatchesData(String page) async {
-    final response = await http.get(Uri.parse(baseUrl+upcomingMatches+page));
+    final response =
+        await http.get(Uri.parse(baseUrl + upcomingMatches + page));
     return Docs.fromJson(jsonDecode(response.body));
   }
 
   // Point table
   Future<List<Points>> pointTableData() async {
-    final response = await http.get(Uri.parse(baseUrl+pointTable));
-    return parsePoints(response.body).where((element) => element.championship != null).toList();
+    final response = await http.get(Uri.parse(baseUrl + pointTable));
+    return parsePoints(response.body)
+        .where((element) => element.championship != null)
+        .toList();
   }
 
   List<Points> parsePoints(String response) {
-    final  parsed = jsonDecode(response).cast<Map<String, dynamic>>();
+    final parsed = jsonDecode(response).cast<Map<String, dynamic>>();
     return List<Points>.from(parsed.map((i) => Points.fromJson(i)));
   }
 
   // ICC Ranking
   Future<Ranking> iccRankingData() async {
-    final response = await http.get(Uri.parse(baseUrl+iccRanking));
+    final response = await http.get(Uri.parse(baseUrl + iccRanking));
     return Ranking.fromJson(jsonDecode(response.body));
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:material_segmented_control/material_segmented_control.dart';
 import 'package:odds_viewer/Helper/constants.dart';
 import 'package:odds_viewer/Helper/network.dart';
@@ -18,6 +19,7 @@ class MatchDetailScene extends StatefulWidget {
 
 class _MatchDetailSceneState extends State<MatchDetailScene> {
   int _selectedSegmentedIndex = 1;
+  late OVMatch matchDetails;
   Map<int, Widget> _children = {
     0: Text(
       'MATCH INFO',
@@ -62,35 +64,53 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
               });
             },
           ),
-          _buildUI(),
+          _loadDate(),
         ],
       ),
     );
   }
 
   _connectSocket() {
+    var logger = Logger();
     IO.Socket socket = IO.io(Network.shared.baseUrl,
-        IO.OptionBuilder().setTransports(["websocket"]).build());
+        IO.OptionBuilder().setTransports(['websocket']).build());
     socket.onConnect((_) {
-      print("Connect");
+      print("Connected");
     });
-    socket.on("server-socket", (data) {
-      print(data);
-    });
+    socket.emit("join-room", widget.match.id);
+    socket.on("socket-server", (data) => logger.d(data));
     socket.onDisconnect((_) {
-      print("Disconnect");
+      print("Disconnected");
     });
     socket.connect();
+  }
+
+  _loadDate() {
+    return FutureBuilder<OVMatch>(
+        future: Network.shared.matchDetails(widget.match.id),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            print(snapshot.error);
+            return Text(snapshot.error.toString());
+          } else if (snapshot.hasData) {
+            matchDetails = snapshot.data as OVMatch;
+            return _buildUI();
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
   }
 
   _buildUI() {
     switch (_selectedSegmentedIndex) {
       case 0:
-        return MatchInfo(match: widget.match);
+        return MatchInfo(match: matchDetails);
       case 1:
-        return MatchLiveLine(match: widget.match);
+        return MatchLiveLine(match: matchDetails);
       case 2:
-        return InningRecords(match: widget.match);
+        return InningRecords(match: matchDetails);
       default:
         return Text('No record found');
     }
