@@ -4,7 +4,14 @@ import 'package:odds_viewer/Helper/upoming_matches.dart';
 import 'package:odds_viewer/Scenes/LiveInfo.dart';
 
 class MatchLiveLine extends StatelessWidget {
-  const MatchLiveLine({Key? key, required this.match}) : super(key: key);
+  const MatchLiveLine(
+      {Key? key,
+      required this.ballInfo,
+      required this.currentOver,
+      required this.match})
+      : super(key: key);
+  final TOver currentOver;
+  final String ballInfo;
   final OVMatch match;
 
   @override
@@ -33,7 +40,11 @@ class MatchLiveLine extends StatelessWidget {
             ),
             height: match.status == 'finished' ? 30 : 0.0,
           ),
-          LiveInfo(match: match),
+          LiveInfo(
+            match: match,
+            ballInfo: ballInfo,
+            currentOver: currentOver,
+          ),
         ],
       ),
     );

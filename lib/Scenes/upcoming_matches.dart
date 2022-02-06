@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:odds_viewer/Helper/constants.dart';
 import 'package:odds_viewer/Helper/list_cell_view.dart';
 import 'package:odds_viewer/Helper/network.dart';
 import 'package:odds_viewer/Helper/upoming_matches.dart';
-import 'package:odds_viewer/Scenes/match_detail.dart';
 
 class UpcomingMatches extends StatelessWidget {
   const UpcomingMatches({Key? key}) : super(key: key);
@@ -44,7 +42,9 @@ class UpcomingMatchesUi extends StatelessWidget {
           return Text(snapshot.error.toString());
         } else if (snapshot.hasData) {
           final upcomingMatches = snapshot.data!.docs as List<OVMatch>;
-          return upcomingMatches.isNotEmpty ? drawList(upcomingMatches, context) : Text('No record found');
+          return upcomingMatches.isNotEmpty
+              ? drawList(upcomingMatches, context)
+              : Text('No record found');
         } else {
           return CircularProgressIndicator();
         }
@@ -60,7 +60,9 @@ class UpcomingMatchesUi extends StatelessWidget {
           return Padding(
             padding: EdgeInsets.all(16),
             child: GestureDetector(
-              child: ListCellView(match: item,),
+              child: ListCellView(
+                match: item,
+              ),
               onTap: () {
                 // DO Nothing
               },

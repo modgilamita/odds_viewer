@@ -291,11 +291,11 @@ class Inning {
   List<dynamic> oldCopie;
   String id;
   BattingTeam battingTeam;
-  TOver currentOver;
-  TOver lastOver;
-  LastBatsmanOut lastBatsmanOut;
+  TOver? currentOver;
+  TOver? lastOver;
+  LastBatsmanOut? lastBatsmanOut;
   String? remainingBalls;
-  Bowler bowler;
+  Bowler? bowler;
   String? text;
   String? matchId;
 
@@ -314,11 +314,16 @@ class Inning {
         oldCopie: List<dynamic>.from(json["oldCopie"].map((x) => x)),
         id: json["_id"],
         battingTeam: BattingTeam.fromJson(json["battingTeam"]),
-        currentOver: TOver.fromJson(json["currentOver"]),
-        lastOver: TOver.fromJson(json["lastOver"]),
-        lastBatsmanOut: LastBatsmanOut.fromJson(json["lastBatsmanOut"]),
+        currentOver: json["currentOver"] == null
+            ? null
+            : TOver.fromJson(json["currentOver"]),
+        lastOver:
+            json["lastOver"] == null ? null : TOver.fromJson(json["lastOver"]),
+        lastBatsmanOut: json["lastBatsmanOut"] == null
+            ? null
+            : LastBatsmanOut.fromJson(json["lastBatsmanOut"]),
         remainingBalls: json["remainingBalls"],
-        bowler: Bowler.fromJson(json["bowler"]),
+        bowler: json["bowler"] is List ? null : Bowler.fromJson(json["bowler"]),
         text: json["text"],
         matchId: json["matchId"],
       );
@@ -464,6 +469,17 @@ class TOver {
         wickets: json["wickets"] == null ? 0 : json["wickets"],
         balls: List<Ball>.from(json["balls"].map((x) => Ball.fromJson(x))),
       );
+
+  static emptyOver() {
+    return TOver(
+        bowlerName: "-",
+        batsNames: [],
+        overNumber: 0,
+        runs: 0,
+        score: 0,
+        wickets: 0,
+        balls: []);
+  }
 }
 
 class Ball {

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:material_segmented_control/material_segmented_control.dart';
@@ -13,6 +15,7 @@ class MatchDetailScene extends StatefulWidget {
   const MatchDetailScene({Key? key, required this.match}) : super(key: key);
 
   final OVMatch match;
+
   @override
   _MatchDetailSceneState createState() => _MatchDetailSceneState();
 }
@@ -20,6 +23,9 @@ class MatchDetailScene extends StatefulWidget {
 class _MatchDetailSceneState extends State<MatchDetailScene> {
   int _selectedSegmentedIndex = 1;
   late OVMatch matchDetails;
+  late TOver currentOver;
+  late String ballInfo;
+
   Map<int, Widget> _children = {
     0: Text(
       'MATCH INFO',
@@ -72,13 +78,17 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
 
   _connectSocket() {
     var logger = Logger();
+
     IO.Socket socket = IO.io(Network.shared.baseUrl,
         IO.OptionBuilder().setTransports(['websocket']).build());
     socket.onConnect((_) {
       print("Connected");
     });
     socket.emit("join-room", widget.match.id);
-    socket.on("socket-server", (data) => logger.d(data));
+    socket.on("socket-server", (data) {
+      _parseSocketData(data);
+      // logger.log(Level.verbose, data);
+    });
     socket.onDisconnect((_) {
       print("Disconnected");
     });
@@ -94,6 +104,14 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
             return Text(snapshot.error.toString());
           } else if (snapshot.hasData) {
             matchDetails = snapshot.data as OVMatch;
+            final _inning = matchDetails.innings.last;
+            ballInfo = _inning.currentOver != null
+                ? _inning.currentOver!.balls.last.value == 'W'
+                    ? _inning.currentOver!.balls.last.type!
+                    : _inning.currentOver!.balls.last.value!
+                : "";
+            currentOver = _inning.currentOver ?? TOver.emptyOver();
+
             return _buildUI();
           } else {
             return Center(
@@ -108,11 +126,35 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
       case 0:
         return MatchInfo(match: matchDetails);
       case 1:
-        return MatchLiveLine(match: matchDetails);
+        return MatchLiveLine(
+            ballInfo: ballInfo, currentOver: currentOver, match: matchDetails);
       case 2:
         return InningRecords(match: matchDetails);
       default:
         return Text('No record found');
+    }
+  }
+
+  _parseSocketData(Map<String, dynamic> json) {
+    String key = json["method"];
+    print(key);
+    switch (key) {
+      case "fast-text":
+        print("New ball - " + json["data"].toString());
+        setState(() {
+          ballInfo = json["data"];
+        });
+        break;
+      case "new-ball":
+        final data = json["data"];
+        final over = TOver.fromJson(data["currentOver"]);
+        setState(() {
+          currentOver = over;
+        });
+        // Logger().log(Level.verbose, json);
+        break;
+      default:
+        break;
     }
   }
 }

@@ -17,6 +17,9 @@ class _InningRecordsState extends State<InningRecords> {
   bool _inning2Selected = false;
   @override
   Widget build(BuildContext context) {
+    if (widget.match.innings.isEmpty) {
+      return Text("");
+    }
     final _firstInning = widget.match.innings.first;
     final team1Title = _firstInning.battingTeam.name! +
         ' ' +

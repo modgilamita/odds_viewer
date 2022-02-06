@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:odds_viewer/Helper/constants.dart';
 import 'package:odds_viewer/Helper/list_cell_view.dart';
 import 'package:odds_viewer/Helper/network.dart';
 import 'package:odds_viewer/Helper/upoming_matches.dart';
 import 'package:odds_viewer/Scenes/match_detail.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 class LiveMatches extends StatelessWidget {
   const LiveMatches({Key? key}) : super(key: key);
@@ -14,19 +12,21 @@ class LiveMatches extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text ("Live Score",
-        style: TextStyle(
-          color: OVColor.textColor,
-          fontWeight: FontWeight.bold,
-          fontSize: 24.0,
+        title: Text(
+          "Live Score",
+          style: TextStyle(
+            color: OVColor.textColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 24.0,
+          ),
         ),
-        ),
-        iconTheme: IconThemeData(
-          color: OVColor.textColor),
+        iconTheme: IconThemeData(color: OVColor.textColor),
         backgroundColor: OVColor.themeColor,
-        ),
+      ),
       body: Center(
-        child: Center(child: LiveMatchesUI(),),
+        child: Center(
+          child: LiveMatchesUI(),
+        ),
       ),
     );
   }
@@ -43,12 +43,12 @@ class LiveMatchesUI extends StatelessWidget {
           if (snapshot.hasError) {
             print(snapshot.error);
             return Text(snapshot.error.toString());
-          }
-          else if (snapshot.hasData) {
+          } else if (snapshot.hasData) {
             final liveMatches = snapshot.data as List<OVMatch>;
-            return liveMatches.isNotEmpty ? drawList(liveMatches, context) : Text("No record available");
-          }
-          else {
+            return liveMatches.isNotEmpty
+                ? drawList(liveMatches, context)
+                : Text("No record available");
+          } else {
             return CircularProgressIndicator();
           }
         });
@@ -59,16 +59,23 @@ class LiveMatchesUI extends StatelessWidget {
         itemCount: list.length,
         itemBuilder: (context, index) {
           final item = list[index];
-          return Padding(padding: EdgeInsets.all(16),
-          child: GestureDetector(
-            child: ListCellView(match: item,),
-            onTap: () {
-              Navigator.push(context,
-              MaterialPageRoute(builder: (context) => MatchDetailScene(match: item,)),
-              );
-            },
-          ),
+          return Padding(
+            padding: EdgeInsets.all(16),
+            child: GestureDetector(
+              child: ListCellView(
+                match: item,
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MatchDetailScene(
+                            match: item,
+                          )),
+                );
+              },
+            ),
           );
-    });
+        });
   }
 }

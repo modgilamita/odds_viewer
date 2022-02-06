@@ -6,13 +6,22 @@ import 'package:odds_viewer/Scenes/BatsmanView.dart';
 import 'package:odds_viewer/Scenes/ListHeader.dart';
 
 class LiveInfo extends StatelessWidget {
-  const LiveInfo({Key? key, required this.match}) : super(key: key);
+  const LiveInfo(
+      {Key? key,
+      required this.match,
+      required this.ballInfo,
+      required this.currentOver})
+      : super(key: key);
   final OVMatch match;
+  final String ballInfo;
+  final TOver currentOver;
   @override
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
+    if (match.innings.isEmpty) {
+      return Text("");
+    }
     final _inning = match.innings.last;
-    print(_inning.lastOver.balls.map((e) => e.value));
     final _text = _inning.battingTeam.name! +
         ' ' +
         _inning.battingTeam.score.toString() +
@@ -56,9 +65,7 @@ class LiveInfo extends StatelessWidget {
                 child: Container(
                   child: FittedBox(
                     child: Text(
-                      _inning.currentOver.balls.last.value == 'W'
-                          ? _inning.currentOver.balls.last.type!.toUpperCase()
-                          : _inning.currentOver.balls.last.value!.toUpperCase(),
+                      this.ballInfo.toUpperCase(),
                       style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.normal,
@@ -97,9 +104,9 @@ class LiveInfo extends StatelessWidget {
                   physics: ClampingScrollPhysics(),
                   shrinkWrap: false,
                   scrollDirection: Axis.horizontal,
-                  itemCount: _inning.currentOver.balls.length,
+                  itemCount: currentOver.balls.length,
                   itemBuilder: (context, index) {
-                    final _ball = _inning.currentOver.balls[index];
+                    final _ball = currentOver.balls[index];
                     final _ballString = _ballValue(_ball);
                     return Padding(
                       padding: EdgeInsets.all(8),
@@ -159,14 +166,14 @@ class LiveInfo extends StatelessWidget {
                       style: OVTextStyle.normalTitle(),
                     ),
                     Text(
-                      _inning.lastBatsmanOut.name != null
-                          ? _inning.lastBatsmanOut.name! +
+                      _inning.lastBatsmanOut?.name != null
+                          ? _inning.lastBatsmanOut!.name! +
                               ' ' +
-                              _inning.lastBatsmanOut.batsmanRuns.toString() +
+                              _inning.lastBatsmanOut!.batsmanRuns.toString() +
                               ' (' +
-                              _inning.lastBatsmanOut.balls.toString() +
+                              _inning.lastBatsmanOut!.balls.toString() +
                               ') SR:' +
-                              _inning.lastBatsmanOut.strikeRate.toString()
+                              _inning.lastBatsmanOut!.strikeRate.toString()
                           : '-',
                       style: OVTextStyle.normalTitle(),
                     ),
@@ -202,7 +209,7 @@ class LiveInfo extends StatelessWidget {
             ),
             Container(
               child: Text(
-                '  Bowler:       ' + _inning.currentOver.bowlerName,
+                '  Bowler:       ' + currentOver.bowlerName,
                 style: TextStyle(
                     color: OVColor.textColor,
                     fontSize: 14,
