@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:odds_viewer/Helper/constants.dart';
 import 'package:odds_viewer/Helper/upoming_matches.dart';
 import 'package:odds_viewer/Scenes/LiveInfo.dart';
+import 'package:odds_viewer/Scenes/Odds.dart';
 
 class MatchLiveLine extends StatelessWidget {
   const MatchLiveLine(
       {Key? key,
       required this.ballInfo,
       required this.currentOver,
-      required this.match})
+      required this.match,
+      required this.marketrates,
+      required this.bookmarkers})
       : super(key: key);
   final TOver currentOver;
   final String ballInfo;
   final OVMatch match;
+  final List<MarketRate> marketrates;
+  final List<MarketRate> bookmarkers;
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +45,11 @@ class MatchLiveLine extends StatelessWidget {
             ),
             height: match.status == 'finished' ? 30 : 0.0,
           ),
-          LiveInfo(
-            match: match,
-            ballInfo: ballInfo,
-            currentOver: currentOver,
-          ),
+          LiveInfo(match: match, ballInfo: ballInfo, currentOver: currentOver),
+          OddsView(
+            marketRates: marketrates,
+            // bookmarkers: bookmarkers,
+          )
         ],
       ),
     );

@@ -437,7 +437,7 @@ class Bowler {
         maidens: json["maidens"] == null ? 0 : json["maidens"],
         wickets: json["wickets"] == null ? 0 : json["wickets"],
         bowlerRuns: json["bowlerRuns"] == null ? 0 : json["bowlerRuns"],
-        economy: json["economy"].toDouble(),
+        economy: json["economy"] == null ? 0 : json["economy"].toDouble(),
       );
 }
 

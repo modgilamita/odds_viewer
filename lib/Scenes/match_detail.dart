@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:material_segmented_control/material_segmented_control.dart';
 import 'package:odds_viewer/Helper/constants.dart';
 import 'package:odds_viewer/Helper/network.dart';
@@ -25,6 +22,8 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
   late OVMatch matchDetails;
   late TOver currentOver;
   late String ballInfo;
+  late List<MarketRate> marketRates;
+  late List<MarketRate> bookmarkers;
 
   Map<int, Widget> _children = {
     0: Text(
@@ -77,7 +76,7 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
   }
 
   _connectSocket() {
-    var logger = Logger();
+    // var logger = Logger();
 
     IO.Socket socket = IO.io(Network.shared.baseUrl,
         IO.OptionBuilder().setTransports(['websocket']).build());
@@ -111,7 +110,8 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
                     : _inning.currentOver!.balls.last.value!
                 : "";
             currentOver = _inning.currentOver ?? TOver.emptyOver();
-
+            marketRates = List<MarketRate>.empty();
+            bookmarkers = List<MarketRate>.empty();
             return _buildUI();
           } else {
             return Center(
@@ -127,7 +127,12 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
         return MatchInfo(match: matchDetails);
       case 1:
         return MatchLiveLine(
-            ballInfo: ballInfo, currentOver: currentOver, match: matchDetails);
+          ballInfo: ballInfo,
+          currentOver: currentOver,
+          match: matchDetails,
+          marketrates: marketRates,
+          bookmarkers: bookmarkers,
+        );
       case 2:
         return InningRecords(match: matchDetails);
       default:
@@ -140,7 +145,6 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
     print(key);
     switch (key) {
       case "fast-text":
-        print("New ball - " + json["data"].toString());
         setState(() {
           ballInfo = json["data"];
         });
@@ -151,7 +155,17 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
         setState(() {
           currentOver = over;
         });
-        // Logger().log(Level.verbose, json);
+        break;
+      case "match-rates":
+        final data = json["data"];
+        final jsonMarketRate = data["marketRate"];
+        final jsonBookmarkers = data["bookmarker"];
+        setState(() {
+          marketRates = List<MarketRate>.from(
+              jsonMarketRate.map((x) => MarketRate.fromJson(x)));
+          bookmarkers = List<MarketRate>.from(
+              jsonBookmarkers.map((x) => MarketRate.fromJson(x)));
+        });
         break;
       default:
         break;

@@ -15,6 +15,7 @@ class LiveInfo extends StatelessWidget {
   final OVMatch match;
   final String ballInfo;
   final TOver currentOver;
+
   @override
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
@@ -138,8 +139,7 @@ class LiveInfo extends StatelessWidget {
                     Text(
                       (_inning.battingTeam.requiredRuns).toString() +
                           ' runs required in ' +
-                          (_inning.battingTeam.balls).toString() +
-                          'balls',
+                          ((_inning.remainingBalls ?? "").toString() + 'balls'),
                       style: OVTextStyle.normalTitle(),
                     ),
                     Text(
