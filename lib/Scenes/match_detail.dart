@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:material_segmented_control/material_segmented_control.dart';
 import 'package:odds_viewer/Helper/constants.dart';
 import 'package:odds_viewer/Helper/network.dart';
@@ -22,8 +23,9 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
   late OVMatch matchDetails;
   late TOver currentOver;
   late String ballInfo;
-  late List<MarketRate> marketRates;
-  late List<MarketRate> bookmarkers;
+  late List<MarketRate> marketRateData;
+  late List<MarketRate> bookmarkerData;
+  late List<Session> sessionData;
 
   Map<int, Widget> _children = {
     0: Text(
@@ -69,7 +71,7 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
               });
             },
           ),
-          _loadDate(),
+          _loadData(),
         ],
       ),
     );
@@ -94,24 +96,26 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
     socket.connect();
   }
 
-  _loadDate() {
+  _loadData() {
     return FutureBuilder<OVMatch>(
         future: Network.shared.matchDetails(widget.match.id),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            print(snapshot.error);
-            return Text(snapshot.error.toString());
+            matchDetails = widget.match;
+            return _buildUI();
           } else if (snapshot.hasData) {
             matchDetails = snapshot.data as OVMatch;
-            final _inning = matchDetails.innings.last;
-            ballInfo = _inning.currentOver != null
-                ? _inning.currentOver!.balls.last.value == 'W'
-                    ? _inning.currentOver!.balls.last.type!
-                    : _inning.currentOver!.balls.last.value!
-                : "";
-            currentOver = _inning.currentOver ?? TOver.emptyOver();
-            marketRates = List<MarketRate>.empty();
-            bookmarkers = List<MarketRate>.empty();
+            if (matchDetails.innings.isNotEmpty) {
+              final _inning = matchDetails.innings.last;
+              ballInfo = _inning.currentOver != null
+                  ? _inning.currentOver!.balls.last.value == 'W'
+                      ? _inning.currentOver!.balls.last.type!
+                      : _inning.currentOver!.balls.last.value!
+                  : "";
+              currentOver = _inning.currentOver ?? TOver.emptyOver();
+              marketRateData = matchDetails.marketRate;
+              bookmarkerData = matchDetails.bookmarker;
+            }
             return _buildUI();
           } else {
             return Center(
@@ -130,8 +134,8 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
           ballInfo: ballInfo,
           currentOver: currentOver,
           match: matchDetails,
-          marketrates: marketRates,
-          bookmarkers: bookmarkers,
+          marketRates: marketRateData,
+          bookmarkers: bookmarkerData,
         );
       case 2:
         return InningRecords(match: matchDetails);
@@ -157,14 +161,19 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
         });
         break;
       case "match-rates":
+        // final logger = Logger();
+        // logger.log(Level.debug, json["data"]);
         final data = json["data"];
-        final jsonMarketRate = data["marketRate"];
-        final jsonBookmarkers = data["bookmarker"];
+        final bookmarker = List<MarketRate>.from(
+            data["bookmarker"].map((x) => MarketRate.fromJson(x)));
+        final market = List<MarketRate>.from(
+            data["marketRate"].map((x) => MarketRate.fromJson(x)));
+        final session =
+            List<Session>.from(data["session"].map((x) => Session.fromJson(x)));
         setState(() {
-          marketRates = List<MarketRate>.from(
-              jsonMarketRate.map((x) => MarketRate.fromJson(x)));
-          bookmarkers = List<MarketRate>.from(
-              jsonBookmarkers.map((x) => MarketRate.fromJson(x)));
+          matchDetails.bookmarker = bookmarker;
+          matchDetails.marketRate = market;
+          matchDetails.session = session;
         });
         break;
       default:

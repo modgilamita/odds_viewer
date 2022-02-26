@@ -6,6 +6,8 @@ class OVColor {
   static final textColor = false ? Color(0xFFFFFFFF) : Color(0xFF1E2250);
   static final bg1Color = false ? Color(0xFFFFFFFF) : Color(0xFFEFEFEF);
   static final bg2Color = false ? Color(0xFFFFFFFF) : Color(0xFFF5F5F5);
+  static final oddBackColor = Color.fromARGB(255, 184, 201, 224);
+  static final oddLayColor = Color.fromARGB(255, 213, 155, 47);
 }
 
 class OVAssets {

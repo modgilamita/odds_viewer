@@ -15,10 +15,10 @@ class Docs {
 class OVMatch {
   final String status;
   final List<Inning> innings;
-  final List<MarketRate> marketRate;
-  final List<Session> session;
+  var marketRate;
+  var session;
   final dynamic lambi;
-  final List<MarketRate> bookmarker;
+  var bookmarker;
   final dynamic scores;
   final String id;
   final dynamic championShip;
@@ -97,8 +97,8 @@ class Session {
   final String mtype;
   final String mname;
   final String name;
-  final dynamic back;
-  final dynamic lay;
+  final MarketObject back;
+  final MarketObject lay;
   final String status;
   final String statusLabel;
   Session({
@@ -112,21 +112,25 @@ class Session {
   });
   factory Session.fromJson(Map<String, dynamic> json) {
     return Session(
-      mtype: json['mtype'],
-      mname: json['mname'],
-      name: json['name'],
-      back: json['back'],
-      lay: json['lay'],
-      status: json['status'],
-      statusLabel: json['statusLabel'],
+      mtype: json['mtype'] != null ? json["mtype"] : "",
+      mname: json['mname'] != null ? json["mname"] : "",
+      name: json['name'] != null ? json["name"] : "",
+      back: json['back'] != null
+          ? MarketObject.fromJson(json['back'])
+          : MarketObject.empty(),
+      lay: json['lay'] != null
+          ? MarketObject.fromJson(json['lay'])
+          : MarketObject.empty(),
+      status: json['status'] != null ? json["status"] : "",
+      statusLabel: json['statusLabel'] != null ? json["statusLabel"] : "",
     );
   }
 }
 
 class MarketRate {
   final String name;
-  final dynamic back;
-  final dynamic lay;
+  final MarketObject back;
+  final MarketObject lay;
   MarketRate({
     required this.name,
     required this.back,
@@ -134,9 +138,13 @@ class MarketRate {
   });
   factory MarketRate.fromJson(Map<String, dynamic> json) {
     return MarketRate(
-      name: json['name'],
-      back: json['back'],
-      lay: json['lay'],
+      name: json['name'] != null ? json['name'] : "",
+      back: json['back'] != null
+          ? MarketObject.fromJson(json['back'])
+          : MarketObject.empty(),
+      lay: json['lay'] != null
+          ? MarketObject.fromJson(json['lay'])
+          : MarketObject.empty(),
     );
   }
 }
@@ -152,10 +160,13 @@ class MarketObject {
   });
   factory MarketObject.fromJson(Map<String, dynamic> json) {
     return MarketObject(
-      price: json['price'] ? json['price'].toString() : '0.0',
-      size: json['size'] ? json['size'].toString() : '0.0',
-      line: json['line'] ? json['line'].toString() : '0.0',
+      price: json['price'] != null ? json['price'].toString() : '0.0',
+      size: json['size'] != null ? json['size'].toString() : '0.0',
+      line: json['line'] != null ? json['line'].toString() : '0.0',
     );
+  }
+  static MarketObject empty() {
+    return MarketObject(price: "", size: "", line: "");
   }
 }
 

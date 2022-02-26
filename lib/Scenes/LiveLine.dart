@@ -10,13 +10,13 @@ class MatchLiveLine extends StatelessWidget {
       required this.ballInfo,
       required this.currentOver,
       required this.match,
-      required this.marketrates,
+      required this.marketRates,
       required this.bookmarkers})
       : super(key: key);
   final TOver currentOver;
   final String ballInfo;
   final OVMatch match;
-  final List<MarketRate> marketrates;
+  final List<MarketRate> marketRates;
   final List<MarketRate> bookmarkers;
 
   @override
@@ -46,9 +46,10 @@ class MatchLiveLine extends StatelessWidget {
             height: match.status == 'finished' ? 30 : 0.0,
           ),
           LiveInfo(match: match, ballInfo: ballInfo, currentOver: currentOver),
-          OddsView(
-            marketRates: marketrates,
-            // bookmarkers: bookmarkers,
+          OddsForCurrentMatch(
+            marketRates: marketRates,
+            bookmarkers: bookmarkers,
+            session: match.session,
           )
         ],
       ),
