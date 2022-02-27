@@ -152,6 +152,7 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
         setState(() {
           ballInfo = json["data"];
         });
+        print(json);
         break;
       case "new-ball":
         final data = json["data"];
@@ -161,8 +162,6 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
         });
         break;
       case "match-rates":
-        // final logger = Logger();
-        // logger.log(Level.debug, json["data"]);
         final data = json["data"];
         final bookmarker = List<MarketRate>.from(
             data["bookmarker"].map((x) => MarketRate.fromJson(x)));

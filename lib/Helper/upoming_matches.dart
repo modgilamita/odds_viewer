@@ -160,9 +160,9 @@ class MarketObject {
   });
   factory MarketObject.fromJson(Map<String, dynamic> json) {
     return MarketObject(
-      price: json['price'] != null ? json['price'].toString() : '0.0',
-      size: json['size'] != null ? json['size'].toString() : '0.0',
-      line: json['line'] != null ? json['line'].toString() : '0.0',
+      price: json['price'] != null ? json['price'].toString() : '',
+      size: json['size'] != null ? json['size'].toString() : '',
+      line: json['line'] != null ? json['line'].toString() : '',
     );
   }
   static MarketObject empty() {

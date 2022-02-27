@@ -99,92 +99,72 @@ class LiveInfo extends StatelessWidget {
               color: OVColor.bg2Color,
               height: 20,
             ),
-            SizedBox(
-              height: 46,
-              child: ListView.builder(
-                  physics: ClampingScrollPhysics(),
-                  shrinkWrap: false,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: currentOver.balls.length,
-                  itemBuilder: (context, index) {
-                    final _ball = currentOver.balls[index];
-                    final _ballString = _ballValue(_ball);
-                    return Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                          border:
-                              Border.all(color: OVColor.textColor, width: 1),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(4),
-                          child: FittedBox(
-                            child: Text(_ballString),
+            if (currentOver.balls.isNotEmpty)
+              SizedBox(
+                height: 46,
+                child: ListView.builder(
+                    physics: ClampingScrollPhysics(),
+                    shrinkWrap: false,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: currentOver.balls.length,
+                    itemBuilder: (context, index) {
+                      final _ball = currentOver.balls[index];
+                      final _ballString = _ballValue(_ball);
+                      return Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            border:
+                                Border.all(color: OVColor.textColor, width: 1),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(4),
+                            child: FittedBox(
+                              child: Text(_ballString),
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }),
-            ),
-            Container(
-              color: OVColor.bg2Color,
-              child: Padding(
-                padding: EdgeInsets.all(8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      (_inning.battingTeam.requiredRuns).toString() +
-                          ' runs required in ' +
-                          ((_inning.remainingBalls ?? "").toString() + 'balls'),
-                      style: OVTextStyle.normalTitle(),
-                    ),
-                    Text(
-                      'RRR: ' +
-                          (_inning.battingTeam.requiredRunRate == null
-                              ? '0.0'
-                              : _inning.battingTeam.requiredRunRate.toString()),
-                      style: OVTextStyle.normalTitle(),
-                    ),
-                  ],
-                ),
+                      );
+                    }),
               ),
-            ),
+            if (match.innings.length > 1) _rrrView(_inning),
             Padding(padding: EdgeInsets.all(4)),
-            Container(
-              color: OVColor.bg2Color,
-              child: Padding(
-                padding: EdgeInsets.all(8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Last Wicket:',
-                      style: OVTextStyle.normalTitle(),
-                    ),
-                    Text(
-                      _inning.lastBatsmanOut?.name != null
-                          ? _inning.lastBatsmanOut!.name! +
-                              ' ' +
-                              _inning.lastBatsmanOut!.batsmanRuns.toString() +
-                              ' (' +
-                              _inning.lastBatsmanOut!.balls.toString() +
-                              ') SR:' +
-                              _inning.lastBatsmanOut!.strikeRate.toString()
-                          : '-',
-                      style: OVTextStyle.normalTitle(),
-                    ),
-                  ],
+            if (_inning.lastBatsmanOut?.name != null)
+              Container(
+                color: OVColor.bg2Color,
+                child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Last Wicket:',
+                        style: OVTextStyle.normalTitle(),
+                      ),
+                      Text(
+                        _inning.lastBatsmanOut?.name != null
+                            ? _inning.lastBatsmanOut!.name! +
+                                ' ' +
+                                _inning.lastBatsmanOut!.batsmanRuns.toString() +
+                                ' (' +
+                                _inning.lastBatsmanOut!.balls.toString() +
+                                ') SR:' +
+                                _inning.lastBatsmanOut!.strikeRate.toString()
+                            : '-',
+                        style: OVTextStyle.normalTitle(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
             ListHeader(),
             ListView.builder(
               itemCount: _inning.batsmen.length,
               shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return BatsmanView(batsman: _inning.batsmen[index]);
               },
@@ -221,6 +201,33 @@ class LiveInfo extends StatelessWidget {
           ],
         )
       ],
+    );
+  }
+
+  Container _rrrView(Inning _inning) {
+    return Container(
+      color: OVColor.bg2Color,
+      child: Padding(
+        padding: EdgeInsets.all(8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              (_inning.battingTeam.requiredRuns).toString() +
+                  ' runs required in ' +
+                  ((_inning.remainingBalls ?? "").toString() + 'balls'),
+              style: OVTextStyle.normalTitle(),
+            ),
+            Text(
+              'RRR: ' +
+                  (_inning.battingTeam.requiredRunRate == null
+                      ? '0.0'
+                      : _inning.battingTeam.requiredRunRate.toString()),
+              style: OVTextStyle.normalTitle(),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

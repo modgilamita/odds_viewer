@@ -164,41 +164,61 @@ class OddsForCurrentMatch extends StatelessWidget {
       fontWeight: FontWeight.normal,
       color: OVColor.textColor,
     );
-    return Row(
+    return Stack(
+      alignment: Alignment.topLeft,
       children: [
-        Container(
-          child: Padding(
-              padding: EdgeInsets.all(8),
-              child: Text(
-                session.name,
-                style: _textStyle,
-              )),
-          width: screenWidth / 2,
+        Row(
+          children: [
+            Container(
+              child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text(
+                    session.name,
+                    style: _textStyle,
+                  )),
+              width: screenWidth / 2,
+            ),
+            Container(
+              child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text(
+                    session.lay.line.toString() +
+                        "\n" +
+                        session.lay.price.toString(),
+                    style: _textStyle,
+                  )),
+              width: screenWidth / 4,
+              color: OVColor.oddLayColor,
+            ),
+            Container(
+              child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text(
+                    session.back.line.toString() +
+                        "\n" +
+                        session.back.price.toString(),
+                    style: _textStyle,
+                  )),
+              width: screenWidth / 4,
+              color: OVColor.oddBackColor,
+            ),
+          ],
         ),
-        Container(
-          child: Padding(
-              padding: EdgeInsets.all(8),
+        if (session.status != "OPEN")
+          Container(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: EdgeInsets.all(12),
               child: Text(
-                session.back.price.toString() +
-                    "\n" +
-                    session.back.size.toString(),
-                style: _textStyle,
-              )),
-          width: screenWidth / 4,
-          color: OVColor.oddLayColor,
-        ),
-        Container(
-          child: Padding(
-              padding: EdgeInsets.all(8),
-              child: Text(
-                session.lay.price.toString() +
-                    "\n" +
-                    session.lay.size.toString(),
-                style: _textStyle,
-              )),
-          width: screenWidth / 4,
-          color: OVColor.oddBackColor,
-        ),
+                session.status,
+                style: TextStyle(
+                    color: OVColor.textColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal),
+              ),
+            ),
+            color: Colors.white.withAlpha(180),
+          )
       ],
     );
   }
