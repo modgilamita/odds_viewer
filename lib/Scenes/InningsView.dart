@@ -16,6 +16,11 @@ class InningView extends StatelessWidget {
   }
 
   _children(BuildContext _context) {
+    var allBatsmen = inning.batsmen;
+    inning.wickets.forEach((element) {
+      allBatsmen.add(element);
+    });
+    print("All Batsman - " + allBatsmen.length.toString());
     return Expanded(
       child: Column(
         children: [
@@ -42,12 +47,12 @@ class InningView extends StatelessWidget {
               buildContext: _context),
           ListView.builder(
               physics: NeverScrollableScrollPhysics(),
-              itemCount: inning.wickets.length,
+              itemCount: allBatsmen.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                final _wicket = inning.wickets[index];
+                final _wicket = allBatsmen[index];
                 final model = PlayerModel(
-                    column1: _wicket.name!,
+                    column1: _wicket.name! + (_wicket.isOnStrike ? "*" : ""),
                     column2: _wicket.batsmanRuns.toString(),
                     column3: _wicket.balls.toString(),
                     column4: _wicket.fours.toString(),

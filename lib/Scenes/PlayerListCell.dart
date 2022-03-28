@@ -44,7 +44,8 @@ class PlayerListCell extends StatelessWidget {
                         Padding(padding: EdgeInsets.all(2)),
                         Container(
                           child: Text(
-                            'b ' + model.outBy!,
+                            (model.outBy!.isNotEmpty ? 'b ' : '') +
+                                model.outBy!,
                             style: TextStyle(
                                 fontWeight: FontWeight.normal,
                                 fontSize: 12,

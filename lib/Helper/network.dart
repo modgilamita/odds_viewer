@@ -4,7 +4,6 @@ import 'package:odds_viewer/Helper/icc_ranking_model.dart';
 import 'package:odds_viewer/Helper/models.dart';
 import 'package:odds_viewer/Helper/pointTable.dart';
 import 'package:odds_viewer/Helper/upoming_matches.dart';
-import 'package:odds_viewer/Scenes/recent_matches.dart';
 
 class Network {
   Network._privateConstructor();

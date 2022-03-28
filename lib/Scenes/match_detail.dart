@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:material_segmented_control/material_segmented_control.dart';
 import 'package:odds_viewer/Helper/constants.dart';
 import 'package:odds_viewer/Helper/network.dart';
@@ -19,6 +18,7 @@ class MatchDetailScene extends StatefulWidget {
 }
 
 class _MatchDetailSceneState extends State<MatchDetailScene> {
+  var isSocketConected = false;
   int _selectedSegmentedIndex = 1;
   late OVMatch matchDetails;
   late TOver currentOver;
@@ -78,20 +78,22 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
   }
 
   _connectSocket() {
-    // var logger = Logger();
-
+    if (isSocketConected) {
+      return;
+    }
     IO.Socket socket = IO.io(Network.shared.baseUrl,
         IO.OptionBuilder().setTransports(['websocket']).build());
     socket.onConnect((_) {
       print("Connected");
+      isSocketConected = true;
     });
     socket.emit("join-room", widget.match.id);
     socket.on("socket-server", (data) {
       _parseSocketData(data);
-      // logger.log(Level.verbose, data);
     });
     socket.onDisconnect((_) {
       print("Disconnected");
+      isSocketConected = false;
     });
     socket.connect();
   }
@@ -111,8 +113,13 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
                   ? _inning.currentOver!.balls.last.value == 'W'
                       ? _inning.currentOver!.balls.last.type!
                       : _inning.currentOver!.balls.last.value!
-                  : "";
+                  : "-";
               currentOver = _inning.currentOver ?? TOver.emptyOver();
+              marketRateData = matchDetails.marketRate;
+              bookmarkerData = matchDetails.bookmarker;
+            } else {
+              ballInfo = "-";
+              currentOver = TOver.emptyOver();
               marketRateData = matchDetails.marketRate;
               bookmarkerData = matchDetails.bookmarker;
             }
@@ -152,7 +159,6 @@ class _MatchDetailSceneState extends State<MatchDetailScene> {
         setState(() {
           ballInfo = json["data"];
         });
-        print(json);
         break;
       case "new-ball":
         final data = json["data"];
